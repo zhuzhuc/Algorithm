@@ -1,0 +1,126 @@
+#include <bits/stdc++.h>
+// #pragma GCC optimize("O3,unroll-loops")
+// #pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
+using namespace std;
+
+#define ll long long
+#define ff first
+#define ss second
+#define pb push_back
+#define eb emplace_back
+
+const int maxn = 2e5 + 2;
+const int maxm = 62;
+
+bool isLeapYear(int year) {
+    if (year % 400 == 0) {
+        return true;
+    } else if (year % 100 == 0) {
+        return false;
+    } else if (year % 4 == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool isPrime(int n) {
+    if (n <= 1) return false;
+    if (n == 2) return true; 
+    if (n % 2 == 0) return false; 
+    for (int i = 3; i <= sqrt(n); i += 2) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+
+string multiply(string num1, int num2) {
+    int carry = 0;
+    for (int i = num1.size() - 1; i >= 0; --i) {
+        int product = (num1[i] - '0') * num2 + carry;
+        num1[i] = (product % 10) + '0';
+        carry = product / 10;
+    }
+    while (carry) {
+        num1.insert(num1.begin(), (carry % 10) + '0');
+        carry /= 10;
+    }
+    return num1;
+}
+
+string factorial(int n) {
+    string result = "1";
+    for (int i = 2; i <= n; ++i) {
+        result = multiply(result, i);
+    }
+    return result;
+}
+
+int count_digit(const string& number, char digit) {
+    return count(number.begin(), number.end(), digit);
+}
+void solve() {
+    int m, n;
+    cin >> m >> n;
+
+    vector<int> num(m * n);
+    for (int i = 0; i < m * n; ++i) {
+        cin >> num[i];
+    }
+
+    vector<vector<int>> whe(n + 1, vector<int>(m + 1));
+    vector<vector<int>> tim(n + 1, vector<int>(m + 1));
+    
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> whe[i][j];
+        }
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> tim[i][j];
+        }
+    }
+
+    vector<int> calc(n + 1, 0);
+    vector<int> last(n + 1, 0);
+    vector<vector<bool>> vis(m + 1, vector<bool>(10005, false));
+
+    int ans = 0;
+
+    for (int i = 0; i < m * n; ++i) {
+        int p1 = num[i];
+        calc[p1]++;
+        int p2 = calc[p1];
+        int w = whe[p1][p2];
+        int t = tim[p1][p2];
+        int res = 0;
+
+        for (int j = last[p1] + 1; j < 10005; ++j) {
+            if (vis[w][j]) {
+                res = 0;
+            } else {
+                res++;
+            }
+            if (res == t) {
+                for (int k = j - t + 1; k <= j; ++k) {
+                    vis[w][k] = true;
+                }
+                last[p1] = j;
+                ans = max(ans, last[p1]);
+                break;
+            }
+        }
+    }
+
+    cout << ans << endl;
+    
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    solve();
+    return 0;
+}
