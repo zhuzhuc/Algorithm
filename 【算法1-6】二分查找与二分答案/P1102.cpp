@@ -1,4 +1,20 @@
-#include <bits/stdc++.h>
+#include<iostream>
+#include<vector>
+#include<unordered_map>
+#include<algorithm>
+#include<cmath>
+#include<set>
+#include<map>
+#include<queue>
+#include<stack>
+#include<iomanip>
+#include<unordered_set>
+#include<string>
+#include<ctime>
+#include<cstring>
+#include<sstream>
+#include<list>	
+typedef long long ll;				
 #define mp make_pair
 #define fi first
 #define se second
@@ -29,7 +45,7 @@ typedef pair<i64, i64> pi64;
 typedef double ld;
 template<class T> bool uin(T &a, T b) { return a > b ? (a = b, true) : false; }
 template<class T> bool uax(T &a, T b) { return a < b ? (a = b, true) : false; }
-void solve(){
+void solve1(){
 	int n,c;
 	cin >> n >> c;
 	std::vector<int> v(n);
@@ -54,11 +70,57 @@ void solve(){
 	
 	cout << count << "\n";
 }
+int binary_search1(vector<int>& a, int x) {
+    int l = 0, r = a.size();
+    while (l + 1 < r) {
+        int mid = (l + r) / 2;
+        if (a[mid] < x) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+    if (r < a.size() && a[r] == x) return r;
+    else return -1;
+}
+int binary_search2(vector<int>& a, int x) {
+    int l = 0, r = a.size();
+    while (l + 1 < r) {
+        int mid = (l + r) / 2;
+        if (a[mid] <= x) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+    if (l < a.size() && a[l] == x) return l;
+    else return -1;
+}
+
+void solve2() {
+    int n, c;
+    cin >> n >> c;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i]; 
+    sort(a.begin(), a.end()); 
+    ll cnt = 0;
+    for (int i = 0; i < n; i++) {
+        int A = a[i] + c;
+        int res1 = binary_search1(a, A);
+        if (res1 == -1) continue;
+        else {
+            int res2 = binary_search2(a, A);
+            cnt += res2 - res1 + 1;
+        }
+    }
+    cout << cnt << endl;
+}
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.precision(10);
-    solve();
+	//solve1();
+    solve2();
     cout<<fixed;
 #ifdef LOCAL_DEFINE
     freopen("input.txt", "r", stdin);

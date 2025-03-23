@@ -1,4 +1,26 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <string>
+#include <cstring>
+#include <map>
+#include <set>
+#include <queue>
+#include <stack>
+
+#include <unordered_map>
+#include <unordered_set>
+#include <bitset>
+#include <random>
+#include <chrono>
+#include <complex>
+#include <cassert>
+#include <iomanip>
+#include <sstream>
+#include <numeric>
+#include <functional>
+#include <climits>
 // #pragma GCC optimize("O3,unroll-loops")
 // #pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 using namespace std;
@@ -60,34 +82,64 @@ int count_digit(const string& number, char digit) {
     return count(number.begin(), number.end(), digit);
 }
 
-void solve() {
-    int n, m;
-    cin >> n >> m;
+// void solve1() {
+//     int n, m;
+//     cin >> n >> m;
     
-    vector<int> array(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> array[i];
-    }
+//     vector<int> array(n);
+//     for (int i = 0; i < n; ++i) {
+//         cin >> array[i];
+//     }
 
-    for (int i = 0; i < m; ++i) {
-        int query;
-        cin >> query;
+//     for (int i = 0; i < m; ++i) {
+//         int query;
+//         cin >> query;
 
-        auto it = lower_bound(array.begin(), array.end(), query);
+//         auto it = lower_bound(array.begin(), array.end(), query);
         
-        if (it != array.end() && *it == query) {
-            cout << (it - array.begin() + 1) << " "; 
+//         if (it != array.end() && *it == query) {
+//             cout << (it - array.begin() + 1) << " "; 
+//         } else {
+//             cout << -1 << " "; 
+//         }
+//     }
+//     cout << endl;
+// }
+bool isBlue(int num, int x){
+    if(num < x) return true;
+    else return false;
+}
+int binarySearch(const vector<int>& array, int len, int x) {
+    int l = 0, r = len + 1;
+    while (l + 1 < r) {
+        int mid = (l + r) / 2;  
+        if (array[mid] < x) {
+            l = mid;
         } else {
-            cout << -1 << " "; 
+            r = mid;
         }
     }
-    cout << endl;
-    
+    if (r < len && array[r] == x) return r;  
+    return -1;
+}
+
+void solve2() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> array(n);
+    for (int i = 1; i <= n; ++i) {  
+        cin >> array[i];
+    }
+    while (m--) {
+        int x;
+        cin >> x;
+        cout << binarySearch(array, n, x) << " ";
+    }
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    solve();
+    solve2();
     return 0;
 }
