@@ -1,4 +1,26 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <cstdio>
+#include <stack>
+#include <queue>
+#include <map>
+#include <functional>
+#include <set>
+#include <cassert>
+#include <string>
+#include <climits>
+#include <unordered_map>
+#include <unordered_set>
+
+#define LOCAL_DEFINE
+#define MOD 1000000007
+#define ll long long
+#define ull unsigned long long
+#define INF 1000000000
+#define PI acos(-1) 
 #define mp make_pair
 #define fi first
 #define se second
@@ -67,11 +89,43 @@ void solve() {
     cout << res << endl;
 }
 
+bool check(const vi& v, i64 m, int x) {
+    i64 sum = 0;  // 使用 i64 避免溢出
+    for (int i = 0; i < v.size(); i++) {  // 从索引 0 开始访问数组
+        sum += max(0, v[i] - x);
+    }
+    if (sum >= m) return true;
+    else return false;
+}
+
+void solve2() {
+    int n;
+    i64 m;
+    cin >> n >> m;
+    vi v(n);
+    int height = 0;
+    for (int i = 0; i < n; i++) {  // 从索引 0 开始读取数据
+        cin >> v[i];
+        height = max(height, v[i]);
+    }
+    int res = 0;
+    int l = 0, r = height;
+    while (l + 1 < r) {
+        int mid = (l + r) / 2;
+        if (check(v, m, mid)) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+    if (check(v, m, r)) cout << r << endl;
+    else cout << l << endl;
+}
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.precision(10);
-    solve();
+    solve2();
     cout << fixed;
 #ifdef LOCAL_DEFINE
     freopen("input.txt", "r", stdin);
