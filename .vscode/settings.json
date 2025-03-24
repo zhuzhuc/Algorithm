@@ -39,6 +39,7 @@
         "*.styl": "stylus",
         "*tmpl": "html",
         "*.proto": "go",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "vector": "cpp"
     }
 }
