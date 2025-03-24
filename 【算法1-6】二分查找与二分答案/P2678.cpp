@@ -1,6 +1,20 @@
-#include <bits/stdc++.h>
-// #pragma GCC optimize("O3,unroll-loops")
-// #pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <cstdio>
+#include <stack>
+#include <queue>
+#include <map>
+#include <functional>
+#include <set>
+#include <climits>
+#include <unordered_map>
+#include <unordered_set>
+#include <bitset>
+#define LOCAL_DEFINE
+#define MOD 1000000007
 using namespace std;
 
 #define ll long long
@@ -12,53 +26,6 @@ using namespace std;
 const int maxn = 2e5 + 2;
 const int maxm = 62;
 
-bool isLeapYear(int year) {
-    if (year % 400 == 0) {
-        return true;
-    } else if (year % 100 == 0) {
-        return false;
-    } else if (year % 4 == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool isPrime(int n) {
-    if (n <= 1) return false;
-    if (n == 2) return true; 
-    if (n % 2 == 0) return false; 
-    for (int i = 3; i <= sqrt(n); i += 2) {
-        if (n % i == 0) return false;
-    }
-    return true;
-}
-
-string multiply(string num1, int num2) {
-    int carry = 0;
-    for (int i = num1.size() - 1; i >= 0; --i) {
-        int product = (num1[i] - '0') * num2 + carry;
-        num1[i] = (product % 10) + '0';
-        carry = product / 10;
-    }
-    while (carry) {
-        num1.insert(num1.begin(), (carry % 10) + '0');
-        carry /= 10;
-    }
-    return num1;
-}
-
-string factorial(int n) {
-    string result = "1";
-    for (int i = 2; i <= n; ++i) {
-        result = multiply(result, i);
-    }
-    return result;
-}
-
-int count_digit(const string& number, char digit) {
-    return count(number.begin(), number.end(), digit);
-}
 int L, N, M;
 vector<int> ro;
 
@@ -87,9 +54,45 @@ void solve() {
     cout << lo << "\n";
 }
 
+const int N_MAX = 1e6+1;
+int a[N_MAX];
+
+bool check2(int x, int n) {
+    int i = 0, cnt = 0, nnow = 0;
+    while (i < n) {
+        while (i < n && a[i] - a[nnow] < x) {
+            i++;
+        }
+        if (i < n) {
+            nnow = i;
+        }
+    }
+    if (L - a[nnow] < x) cnt++;
+    return cnt <= M;
+}
+
+void solve2() {
+    cin >> L >> N >> M;
+    vector<int> ro(N + 1);
+    for (int i = 0; i < N; ++i) {
+        cin >> ro[i];
+    }
+    ro[N] = L; // 将 L 加入作为最后一个点
+    int l = 1, r = L, mid;
+    while (l < r) {
+        mid = (l + r + 1) / 2;
+        if (check2(mid, N)) {
+            l = mid;
+        } else {
+            r = mid - 1;
+        }
+    }
+    cout << l << endl;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    solve();
+    solve();  // 选择运行 solve2
     return 0;
 }
