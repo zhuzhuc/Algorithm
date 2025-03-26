@@ -1,75 +1,62 @@
 #include <iostream>
-#include <algorithm>
-#include <cstring>
-#include <cmath>
-#include <iomanip>
 #include <vector>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <map>
-#include <set>
-#include <unordered_map>
-#include <unordered_set>    
+#include <algorithm>
 using namespace std;
 typedef long long ll;
-const int N = 10010, D = 21;
-ll Q[N][D], KT[D][N], V[N][D], W[N];
-ll temp[D][D], res[N][D];
+
+bool check(int mid, const vector<int>& a, const vector<int>& b, int m, int k) {
+    ll sum = 0;
+    for(int i = 0; i < a.size(); i++) {
+        if(a[i] > mid) {
+            int reduce = min(a[i] - mid, a[i] - k);  // 不能缩减到小于k天
+            sum += (ll)reduce * b[i];
+            if(sum > m) return false;
+        }
+    }
+    return sum <= m;
+}
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    int n, m, k;
+    cin >> n >> m >> k;
     
-    int n, d;
-    cin >> n >> d;
-    
-    // 输入优化：一次性读取
-    for(int i=1;i<=n;i++) 
-        for(int j=1;j<=d;j++) 
-            cin >> Q[i][j];
-    
-    for(int i=1;i<=n;i++)
-        for(int j=1;j<=d;j++)
-            cin >> KT[j][i];  // 直接存储转置
-    
-    for(int i=1;i<=n;i++)
-        for(int j=1;j<=d;j++)
-            cin >> V[i][j];
-    
-    for(int i=1;i<=n;i++)
-        cin >> W[i];
-    
-    // 第一层矩阵乘法：KT × V → temp (d×d)
-    for(int i=1;i<=d;i++){
-        for(int j=1;j<=d;j++){
-            // 去掉 register 关键字
-            ll sum = 0;
-            for(int k=1;k<=n;k++){
-                sum += KT[i][k] * V[k][j];
-            }
-            temp[i][j] = sum;
-        }
+    vector<int> a(n), b(n);
+    int max_t = 0;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i] >> b[i];
+        if(a[i] > max_t) max_t = a[i];
     }
     
-    // 第二层矩阵乘法：Q × temp → res (n×d)
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=d;j++){
-            // 去掉 register 关键字
-            ll sum = 0;
-            for(int k=1;k<=d;k++){
-                sum += Q[i][k] * temp[k][j];
-            }
-            res[i][j] = sum * W[i];
-        }
+    int l = k, r = max_t;
+    while (l < r) {
+        int mid = l + (r - l) / 2;
+        if(check(mid, a, b, m, k)) r = mid;
+        else l = mid + 1;
     }
-    
-    // 输出优化
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=d;j++){
-            cout << res[i][j] << " \n"[j==d];
-        }
-    }
-    
+    cout << l << endl;
     return 0;
 }
+
+/*
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+const int N = 1e5+1;
+int n,m,k;
+LL b[N];
+int main(){
+    cin >> n >> m >> k;
+    for(int i = 0; i < n; i++){
+        int t,c;
+        cin >> t >> c;
+        b[1] += c;
+        b[t+1] -= c;
+    }
+    for(int i = 1; i < N; i++) b[i] += b[i - 1];
+    LL cost = 0;
+    int i = N - 1;
+    while(i > k and cost + b[i] <= m) cost += b[i--];
+    cout << i << endl;
+    return 0;
+}
+*/
