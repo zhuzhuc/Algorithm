@@ -43,7 +43,8 @@ int main() {
     // 第一层矩阵乘法：KT × V → temp (d×d)
     for(int i=1;i<=d;i++){
         for(int j=1;j<=d;j++){
-            register ll sum = 0;
+            // 去掉 register 关键字
+            ll sum = 0;
             for(int k=1;k<=n;k++){
                 sum += KT[i][k] * V[k][j];
             }
@@ -54,7 +55,8 @@ int main() {
     // 第二层矩阵乘法：Q × temp → res (n×d)
     for(int i=1;i<=n;i++){
         for(int j=1;j<=d;j++){
-            register ll sum = 0;
+            // 去掉 register 关键字
+            ll sum = 0;
             for(int k=1;k<=d;k++){
                 sum += Q[i][k] * temp[k][j];
             }
