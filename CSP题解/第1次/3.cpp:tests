@@ -1,0 +1,5 @@
+[
+	{
+		"test": "albw:x\n4\nls -a -l -a documents -b\nls\nls -w 10 -x -w 15\nls -a -b -c -d -e -l\n"
+	}
+]

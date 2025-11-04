@@ -1,4 +1,4 @@
-
+#pragma comment(linker, "/STACK:1024000000,1024000000")
 #ifndef _GLIBCXX_NO_ASSERT
 #include<cassert>
 #endif
@@ -96,48 +96,74 @@ typedef unsigned long long ull;
 #define ms(s) memset(s, 0, sizeof(s))
 const int inf = 0x3f3f3f3f;
 #define LOCAL
-int N, M, K, lost;
-vector<int> v[1001];
-vector<bool> vis;
+ 
+const int N = 30;
+int n;
+bool o1[N], o2[N];
+string ans[N];
 
-void dfs(int cur) {
-    vis[cur] = true;
-    for(int i : v[cur]) {
-        if(i != lost && !vis[i]) {
-            dfs(i);
-        }
-    }
-}
-
-void solve() {
-    cin >> N >> M >> K;
-    vis.resize(N+1);  
-    
-    for(int i = 0; i < M; i++) {
-        int j, k;
-        cin >> j >> k;
-        v[j].push_back(k);
-        v[k].push_back(j);
-    }
-    int k = K;
-    while(k--){
-        cin >> lost;
-        for(int i  =1; i <= N; i++) vis[i] = false;
-        
-        int ans = 0;
-        for(int j = 1; j <= N; j++) {
-            if(j != lost && !vis[j]) {
-                ans++;
-                dfs(j);
-            }
-        }
-        cout << ans - 1 << "\n";
-    }
-}
 
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    solve();
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    string fmt;
+    cin >> fmt;
+
+    // 解析格式字符串
+    bool noArg[26] = {0}, hasArg[26] = {0};
+    for (int i = 0; i < (int)fmt.size(); i++) {
+        char c = fmt[i];
+        if (i + 1 < (int)fmt.size() && fmt[i + 1] == ':') {
+            hasArg[c - 'a'] = true;
+            i++;
+        } else {
+            noArg[c - 'a'] = true;
+        }
+    }
+
+    int N;
+    cin >> N;
+    cin.ignore(); // 读掉换行
+
+    for (int t = 1; t <= N; t++) {
+        string line;
+        getline(cin, line);
+
+        stringstream ss(line);
+        vector<string> tokens;
+        string tmp;
+        while (ss >> tmp) tokens.push_back(tmp);
+
+        map<char, string> used; // 记录选项（按字母升序）
+
+        for (int i = 1; i < (int)tokens.size(); i++) {
+            string cur = tokens[i];
+            if (cur.size() != 2 || cur[0] != '-' || cur[1] < 'a' || cur[1] > 'z') {
+                break; // 非法选项，停止分析
+            }
+            char opt = cur[1];
+            if (noArg[opt - 'a']) {
+                used[opt] = "";
+            } else if (hasArg[opt - 'a']) {
+                if (i + 1 < (int)tokens.size()) {
+                    used[opt] = tokens[i + 1]; // 保存参数
+                    i++;
+                } else {
+                    break; // 参数缺失，停止
+                }
+            } else {
+                break; // 不在格式字符串里，停止
+            }
+        }
+
+        cout << "Case " << t << ":";
+        for (auto &kv : used) {
+            cout << " -" << kv.first;
+            if (!kv.second.empty()) cout << " " << kv.second;
+        }
+        cout << "\n";
+    }
+
     return 0;
 }

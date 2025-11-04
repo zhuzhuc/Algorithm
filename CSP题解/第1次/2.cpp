@@ -186,7 +186,7 @@ IGNORED
 算法标签
 
  */
- const int N = 15;
+const int N = 15;
 int n, m;
 struct win {
     int x1, y1, x2, y2, id;

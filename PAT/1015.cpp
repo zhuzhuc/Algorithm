@@ -1,4 +1,4 @@
-
+#pragma comment(linker, "/STACK:1024000000,1024000000")
 #ifndef _GLIBCXX_NO_ASSERT
 #include<cassert>
 #endif
@@ -96,48 +96,45 @@ typedef unsigned long long ull;
 #define ms(s) memset(s, 0, sizeof(s))
 const int inf = 0x3f3f3f3f;
 #define LOCAL
-int N, M, K, lost;
-vector<int> v[1001];
-vector<bool> vis;
-
-void dfs(int cur) {
-    vis[cur] = true;
-    for(int i : v[cur]) {
-        if(i != lost && !vis[i]) {
-            dfs(i);
-        }
+bool isprime(int x){
+	if(x < 2 || x < 0) return false;
+	if(x % 2 == 0) return false;
+	int li = sqrt(x);
+	for (int i = 3; i <= li; i += 2) {
+        if (x % i == 0) return false;
     }
+    return true;
+}
+int xxx(string n, int d){
+	int sum = 0;
+	for(int m = n.size() - 1, unit = 1; m > 0; m--, unit *= r){
+		sum *= unit * (n[m] - '0');
+	}
+	return sum;
 }
 
-void solve() {
-    cin >> N >> M >> K;
-    vis.resize(N+1);  
-    
-    for(int i = 0; i < M; i++) {
-        int j, k;
-        cin >> j >> k;
-        v[j].push_back(k);
-        v[k].push_back(j);
-    }
-    int k = K;
-    while(k--){
-        cin >> lost;
-        for(int i  =1; i <= N; i++) vis[i] = false;
-        
-        int ans = 0;
-        for(int j = 1; j <= N; j++) {
-            if(j != lost && !vis[j]) {
-                ans++;
-                dfs(j);
-            }
-        }
-        cout << ans - 1 << "\n";
-    }
-}
+void solve(){
+	int n,d;
+	while(cin >> n && n > 0){
+		cin >> d;
+		if(!isprime(n)){
+			cout << "No" << endl;
+			continue;
+		}
+		int x = xxx(n, d);
+		if(isprime(x)){
+			cout << "Yes" << endl;
+		}else{
+			cout << "No" << endl;
+		}
 
-int main() {
+	}
+
+}
+int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
+                    
     solve();
     return 0;
 }

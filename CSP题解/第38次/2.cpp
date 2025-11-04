@@ -1,4 +1,4 @@
-
+#pragma comment(linker, "/STACK:1024000000,1024000000")
 #ifndef _GLIBCXX_NO_ASSERT
 #include<cassert>
 #endif
@@ -96,48 +96,32 @@ typedef unsigned long long ull;
 #define ms(s) memset(s, 0, sizeof(s))
 const int inf = 0x3f3f3f3f;
 #define LOCAL
-int N, M, K, lost;
-vector<int> v[1001];
-vector<bool> vis;
-
-void dfs(int cur) {
-    vis[cur] = true;
-    for(int i : v[cur]) {
-        if(i != lost && !vis[i]) {
-            dfs(i);
-        }
-    }
+const int N=110;
+int n,k,x,y;
+int a[N][N];
+bool st[N][N];
+int dx[8]={1,2,1,2,-1,-2,-1,-2},dy[8]={2,1,-2,-1,2,1,-2,-1};
+int cnt = 0;
+void dfs(int x, int y, int num){
+	st[x][y] = true;
+	cnt++;
+	if(num == k) return;
+	for(int i = 0; i < 8; i++){
+		int a = x+dx[i], b = y+dy[i];
+		if(a<1||a>n||b<1||b>n) continue;
+		if(!st[a][b]){
+			dfs(a, b, num + 1);
+		}
+	}
+	cout << cnt;
 }
 
-void solve() {
-    cin >> N >> M >> K;
-    vis.resize(N+1);  
-    
-    for(int i = 0; i < M; i++) {
-        int j, k;
-        cin >> j >> k;
-        v[j].push_back(k);
-        v[k].push_back(j);
-    }
-    int k = K;
-    while(k--){
-        cin >> lost;
-        for(int i  =1; i <= N; i++) vis[i] = false;
-        
-        int ans = 0;
-        for(int j = 1; j <= N; j++) {
-            if(j != lost && !vis[j]) {
-                ans++;
-                dfs(j);
-            }
-        }
-        cout << ans - 1 << "\n";
-    }
-}
 
-int main() {
+
+int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
-    solve();
+    cin >> n >> k >> x >> y;
+    dfs(x, y, 0);
     return 0;
 }
